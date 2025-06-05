@@ -52,9 +52,6 @@ export class HashMap {
 
       this.size++;
 
-      // deal with collisions here
-
-      //expand hashmap if its over the load factor * capacity
     }
     if (this.size > this.load_factor * this.capacity) {
       this.expandMap();
