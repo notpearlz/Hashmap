@@ -8,6 +8,10 @@ export class HashMap {
     this.size = 0;
   }
 
+  get lenth() {
+    return this.size + 1;
+  }
+
   hash(key) {
     let hashCode = 0;
 
@@ -39,6 +43,7 @@ export class HashMap {
 
       //if not then append and set key
       this.buckets[hash].append(value, _key);
+      this.size++;
     } else {
       const newlist = new LinkedList();
       newlist.append(value, _key);
@@ -50,9 +55,9 @@ export class HashMap {
       // deal with collisions here
 
       //expand hashmap if its over the load factor * capacity
-      if (this.size > this.load_factor * this.capacity) {
-        console.log("OVER CAPACITY!");
-      }
+    }
+    if (this.size > this.load_factor * this.capacity) {
+      this.expandMap();
     }
   }
 
@@ -159,7 +164,7 @@ export class HashMap {
         var cur = this.buckets[key].head;
 
         do {
-          arr.push([cur.key,cur.val]);
+          arr.push([cur.key, cur.val]);
 
           if (!cur.next) break;
           cur = cur.next;
@@ -168,5 +173,18 @@ export class HashMap {
     }
 
     return arr;
+  }
+
+  //expand the hashmap
+  //reorganize evrything in the hashmap to accomdate the new capacity
+  expandMap() {
+    this.capacity = this.capacity * 2;
+
+    const newBucket = this.entries();
+    this.clear();
+
+    for (let i = 0; i < newBucket.length; i++) {
+      this.set(newBucket[i][0], newBucket[i][1]);
+    }
   }
 }
